@@ -11,9 +11,8 @@ function logInfo(msg){
   console.info(`** INFO: ${msg} **`)
 }
 class Mercury {
-  constructor(path){
-    this.path = path
-    this.store = new Corestore(this.path)
+  constructor(store){
+    this.store = store
     this.db = new Database(this.store)
     this.network = null
 
