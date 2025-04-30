@@ -14,8 +14,8 @@ if (fs.existsSync(path)) {
 }
 
 function createMockDB(){
-  return new Database(new Corestore(path + '/'+(Math.random() + 1).toString(36).substring(7)))
-
+  // return new Database(new Corestore(path + '/'+(Math.random() + 1).toString(36).substring(7)))
+  return new Database(new Corestore(RAM))
 }
 
 const db_a = createMockDB()

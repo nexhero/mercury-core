@@ -13,7 +13,7 @@ function logInfo(msg){
 class Mercury {
   constructor(store){
     this.store = store
-    this.db = new Database(this.store)
+    this.db = new Database(store)
     this.network = null
 
   }
