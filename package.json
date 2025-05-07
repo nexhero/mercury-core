@@ -1,6 +1,6 @@
 {
   "name": "mercury-core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Network and Storage manager for Mercury P2P note app",
   "main": "index.mjs",
   "scripts": {
