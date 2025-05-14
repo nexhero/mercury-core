@@ -1,8 +1,8 @@
+
 import Database from './lib/database.js'
 import Corestore from 'corestore'
 import b4a from 'b4a'
 import Hyperswarm from 'hyperswarm'
-
 
 function logError(msg){
   console.error(`** ERROR: ${msg} **`)
@@ -10,18 +10,31 @@ function logError(msg){
 function logInfo(msg){
   console.info(`** INFO: ${msg} **`)
 }
+
 class Mercury {
+  /**
+   * Main class for managing peer-to-peer network operations
+   * @param {Corestore} store - Corestore instance for persistent storage
+   */
   constructor(store){
     this.store = store
     this.db = new Database(store)
     this.network = null
 
   }
+  /**
+   * Destroy the instance and clean up resources
+   * @returns {Promise} - Promise that resolves when cleanup is complete
+   */
   async destroy(){
     await this.db.close()
     await this.network.destroy()
     console.log('Instance has been destroyed')
   }
+  /**
+   * Initialize the network and database
+   * @returns {Promise} - Promise that resolves when initialization is complete
+   */
   async initialize(){
     try {
       await this.store.ready()
@@ -37,6 +50,11 @@ class Mercury {
       throw err
     }
   }
+
+  /**
+   * Listen for network connections
+   * @returns {void}
+   */
   listen(){
     console.log(`** Ready for connection **`)
     this.network.on('connection',(peer)=>{
@@ -48,6 +66,11 @@ class Mercury {
       })
     })
   }
+
+  /**
+   * Encode repository information into a base64 string
+   * @returns {string} - Base64 encoded repository information
+   */
   encodeRepository(){
     const topic = b4a.toString(this.db.discoveryKey, 'hex')
     const writerKey = b4a.toString(this.network.keyPair.publicKey, 'hex')
@@ -55,6 +78,13 @@ class Mercury {
     const combined = b4a.from(`${topic}:${baseKey}:${writerKey}`)
     return b4a.toString(combined, 'base64')
   }
+
+  /**
+   * Decode a base64 encoded repository string
+   * @param {string} encodedRepo - Base64 encoded repository string
+   * @returns {Object} - Decoded repository information
+   * @throws {Error} - If the repository string is invalid
+   */
   decodeRepository(encodedRepo) {
     try {
       const decodedBuffer = b4a.from(encodedRepo, 'base64')
@@ -66,6 +96,14 @@ class Mercury {
       throw new Error('Invalid repository string format')
     }
   }
+
+  /**
+   * Join a remote repository
+   * @param {string} encodedRepo - Base64 encoded repository string
+   * @param {string} name - Optional display name for the repository
+   * @returns {string} - Confirmation message
+   * @throws {Error} - If the repository join fails
+   */
   async joinRemoteRepository(encodedRepo, name) {
     try {
       const { topic, writer, peer } = this.decodeRepository(encodedRepo)
@@ -90,6 +128,13 @@ class Mercury {
       throw err
     }
   }
+
+  /**
+   * Remove a repository
+   * @param {string} repoId - Repository ID
+   * @returns {Promise} - Promise that resolves when removal is complete
+   * @throws {Error} - If the repository removal fails
+   */
   async removeRepository(repoId) {
     try {
       const repo = await this.db.getChannel(repoId)
@@ -101,6 +146,12 @@ class Mercury {
       throw err
     }
   }
+
+  /**
+   * Join all known repositories
+   * @returns {Promise} - Promise that resolves when all repositories are joined
+   * @throws {Error} - If joining repositories fails
+   */
   async joinAllKnownRepositories() {
     try {
       const repos = await this.db.getAllRepositories()
