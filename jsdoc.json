@@ -5,7 +5,7 @@
         "excludePattern": "(node_modules|\\.git)" // Exclude certain directories
     },
     "opts": {
-        "readme": "./readme.md",
+        "readme": "./README.md",
         "template": "node_modules/clean-jsdoc-theme",
         "destination": "./docs", // Output directory for generated documentation
         "recurse": true // Recursively include files in subdirectories

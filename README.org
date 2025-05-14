@@ -1,19 +1,16 @@
 * Mercury Core
-
-*Mercury Core* is a Network and Storage manager for the[[https://github.com/nexhero/mercury][Mercury Note App]] . This repository provides the core functionality that powers Mercury's decentralized storage and networking capabilities.
+*Mercury Core* is a Network and Storage manager for the [[https://github.com/nexhero/mercury][Mercury Note App]] . This repository provides the core functionality that powers Mercury's decentralized storage and networking capabilities.
 
 *Features*
-- Network Management: Efficient handling of peer-to-peer connections.
+- Network Management: Handling of peer-to-peer connections.
 - Storage Management: Use hyperbee and autobase for data storage solutions for Mercury notes.
 - JavaScript-Powered: Entirely built in JavaScript for seamless integration and extensibility.
 
 * Installation
-To get started, clone this repository and install the dependencies:
+To get started.
 
 #+begin_src bash
-git clone https://github.com/nexhero/mercury-core.git
-cd mercury-core
-npm install
+npm i mercury-core
 #+end_src
 
 * Contributing

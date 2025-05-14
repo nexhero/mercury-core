@@ -1,10 +1,6 @@
 import test from 'brittle'
-import Database from '../lib/database.mjs'
-import RAM from 'random-access-memory'
-import Corestore from 'corestore'
-import fs from 'fs'
-
-const path = './test/tmp'
+import {createMockDB,path} from './fixtures.js';
+import fs from 'fs';
 
 if (fs.existsSync(path)) {
   fs.rmSync(path, {
@@ -13,10 +9,6 @@ if (fs.existsSync(path)) {
   })
 }
 
-function createMockDB(){
-  // return new Database(new Corestore(path + '/'+(Math.random() + 1).toString(36).substring(7)))
-  return new Database(new Corestore(RAM))
-}
 
 const db_a = createMockDB()
 const db_b = createMockDB()
