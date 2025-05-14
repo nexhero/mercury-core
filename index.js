@@ -3,6 +3,7 @@ import Database from './lib/database.js'
 import Corestore from 'corestore'
 import b4a from 'b4a'
 import Hyperswarm from 'hyperswarm'
+import DocumentFactory from './lib/objects/index.js';
 
 function logError(msg){
   console.error(`** ERROR: ${msg} **`)
@@ -165,6 +166,26 @@ class Mercury {
     } catch (err) {
       console.error('Error while joining known repositories:', err)
       throw err
+    }
+  }
+
+  /**
+ * Creates a document instance based on the specified type using the database.
+ * @param {string} type - The type of document to create (e.g., "BASE", "NOTE").
+ * @param {Object} [metadata] - Optional metadata to set on the document.
+ * @returns {BaseObject} - The created document instance.
+ * @throws {Error} - If the document type is invalid or unsupported.
+ * @see DocumentFactory - The factory used to create the document.
+ */
+  createDocument(type,metadata=null){
+    try {
+      const doc = DocumentFactory(type,this.db);
+      if (metadta) {
+        doc.fromJson(metadata)
+      }
+      return doc
+    } catch (err) {
+      throw Error(String(err))
     }
   }
 }

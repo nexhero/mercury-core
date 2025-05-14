@@ -1,27 +1,89 @@
 * Mercury Core
+
 *Mercury Core* is a Network and Storage manager for the [[https://github.com/nexhero/mercury][Mercury Note App]] . This repository provides the core functionality that powers Mercury's decentralized storage and networking capabilities.
 
 *Features*
 - Network Management: Handling of peer-to-peer connections.
-- Storage Management: Use hyperbee and autobase for data storage solutions for Mercury notes.
-- JavaScript-Powered: Entirely built in JavaScript for seamless integration and extensibility.
+- Storage Management: Use hyperbee and autobase for data storage.
+
 
 * Installation
-To get started.
+To get started, clone this repository and install the dependencies:
 
+#+begin_src bash
+git clone https://github.com/nexhero/mercury-core.git
+cd mercury-core
+npm install
+#+end_src
+
+* NPM package
 #+begin_src bash
 npm i mercury-core
 #+end_src
 
-* Contributing
-We welcome contributions to Mercury Core! To contribute:
-1. Fork the repository.
-2. Create a new branch for your feature or fix.
-3. Commit your changes and push them to your fork.
-4. Submit a pull request for review.
+
+* Generating documentation
+#+begin_src bash
+jsdoc -c jsdoc.json
+open docs/index.html
+#+end_src
+
+* Examples.
+
+** Initialize Database
+A [[https://github.com/holepunchto/corestore][Corestore]] is required for mercury to save documents.
+#+begin_src javascript
+const store = new Corestore('./temp_store.db');
+const mercury = new Mercury(store);
+await mercury.initialize(); //wait until storage is ready
+mercury.listen(); //Listen for connections
+#+end_src
+
+** Share local repository
+#+begin_src javascript
+const channel = mercury.encodeRepository();
+console.log('Repository channel:',channel);
+#+end_src
+
+** Append other repository
+#+begin_src javascript
+mercury.joinRemoteRepository(channel,'desktop')
+    .then((msg)=>console.log(msg))
+    .catch((err)=>console.log(`Unable to append repository ${String(err)}`))
+#+end_src
+
+** Remove repository
+#+BEGIN_SRC javascript
+const id = 'abc';
+mercury.removeRepository(id)
+    .then(()=>console.log('Repository has been removed'))
+    .catch((err)=>console.log(`Unable to remove repository ${String(err)}`));
+#+END_SRC
+
+** Create Document
+#+begin_src javascript
+const doc = mercury.createDocument('BASE');
+doc.setLabel('This is a document');
+doc.setContent('<p>Hello world</p>');
+doc.save()
+#+end_src
+
+** CRUD.
+
+#+begin_src javascript
+mercury.db.getAllDocuments();
+mercury.db.getDocument(id);
+mercury.db.removeDocument(id);
+#+end_src
 
 * License
 This project is licensed under the MIT License
 
 * Contact
 For questions or support, reach out to the repository maintainers via [[https://github.com/nexhero/mercury-core/issues][GitHub Issues]].
+
+* Additional Resources
+- [[https://github.com/holepunchto/corestore][Corestore]]
+- [[https://github.com/holepunchto/hyperswarm][Hyperswarm]]
+- [[https://github.com/holepunchto/hyperbee][Hyperbee]]
+- [[https://github.com/holepunchto/autobase][Autobase]]
