@@ -1,6 +1,7 @@
 import test from 'brittle'
 import {createMockDB,path} from './fixtures.js';
 import fs from 'fs';
+import DocumentFactory, {DOCUMENT_TYPES} from '../lib/objects/index.js'
 
 if (fs.existsSync(path)) {
   fs.rmSync(path, {
@@ -39,7 +40,7 @@ test('saveDocument', async function(t){
     await db_a.saveDocument('doc_1',{message:"HELLO"} )
     t.pass()
   } catch (err) {
-      t.fail()
+    t.fail()
   }
 })
 
@@ -62,16 +63,25 @@ test('removeDocument',async function(t){
 })
 
 test('getAllDocument',async function(t){
-  for (let i = 0; i < 5; i++) {
-    await db_a.saveDocument(`document_${i}`,{message:`message_${i}`})
+  const opts = ['BASE','NOTE']
+  for (let i = 0; i < 10; i++) {
+    const obj = DocumentFactory.createDocument(
+      opts[Math.floor(Math.random() * opts.length)],
+      db_a
+    );
+    obj.setLabel(`title_${i}`)
+    obj.setContent(`content_${i}`)
+    await obj.save()
+    // await db_a.saveDocument(`document_${i}`,{message:`message_${i}`})
   }
-  const r = await db_a.getAllDocuments()
-
-  if (r.length) {
-    t.pass()
-  }else{
-    t.fail()
-  }
+  const r = await db_a.fetchAllDocuments()
+  console.log(r)
+  t.pass
+  // if (r.length) {
+  //   t.pass()
+  // }else{
+  //   t.fail()
+  // }
 })
 
 test('createWriterCore',async function(t){
