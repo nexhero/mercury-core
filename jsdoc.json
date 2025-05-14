@@ -1,10 +1,11 @@
 {
     "source": {
-        "include": ["./lib"], // Path to your source files
+        "include": ["./lib","./index.js"], // Path to your source files
         "includePattern": ".+\\.js(doc|on)?$", // Pattern to include files
         "excludePattern": "(node_modules|\\.git)" // Exclude certain directories
     },
     "opts": {
+        "readme": "./readme.md",
         "template": "node_modules/clean-jsdoc-theme",
         "destination": "./docs", // Output directory for generated documentation
         "recurse": true // Recursively include files in subdirectories
