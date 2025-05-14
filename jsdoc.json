@@ -1,0 +1,24 @@
+{
+    "source": {
+        "include": ["./lib"], // Path to your source files
+        "includePattern": ".+\\.js(doc|on)?$", // Pattern to include files
+        "excludePattern": "(node_modules|\\.git)" // Exclude certain directories
+    },
+    "opts": {
+        "template": "node_modules/clean-jsdoc-theme",
+        "destination": "./docs", // Output directory for generated documentation
+        "recurse": true // Recursively include files in subdirectories
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    },
+    "plugins": [
+        "plugins/markdown" // Enable Markdown support
+    ],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    }
+
+}

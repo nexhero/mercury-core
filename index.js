@@ -1,4 +1,4 @@
-import Database from './lib/database.mjs'
+import Database from './lib/database.js'
 import Corestore from 'corestore'
 import b4a from 'b4a'
 import Hyperswarm from 'hyperswarm'
