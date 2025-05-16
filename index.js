@@ -179,7 +179,7 @@ class Mercury {
  */
   createDocument(type,metadata=null){
     try {
-      const doc = DocumentFactory(type,this.db);
+      const doc = DocumentFactory.createDocument(type,this.db);
       if (metadta) {
         doc.fromJson(metadata)
       }
