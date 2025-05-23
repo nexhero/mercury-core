@@ -52,17 +52,39 @@ class Mercury {
     }
   }
 
-  /**
-   * Listen for network connections
-   * @returns {void}
-   */
-  listen(){
+/**
+ * Listens for incoming peer connections and handles events.
+ * @param {Function} onData - Callback when data is received from a peer.
+ *                            Takes (peer, data) as arguments.
+ * @param {Function} onError - Callback when an error occurs with a peer.
+ *                             Takes (peer, error) as arguments.
+ * @param {Function} onConnection - Callback when a peer connects.
+ *                                    Takes (peer) as argument.
+ * @returns {void}
+ *
+ * @example
+ * obj.listen(
+ *   (peer, data) => console.log(`Received: ${data}`),
+ *   (peer, err) => console.error(`Error: ${err}`),
+ *   (peer) => console.log(`Peer connected: ${peer.remotePublicKey}`))
+ */
+  listen(onData=null,onError=null,onConnection=null){
     console.log(`** Ready for connection **`)
     this.network.on('connection',(peer)=>{
-      console.log(`** Peer connected ${b4a.toString(peer.remotePublicKey, 'hex')}`)
+      console.log(`*** Peer connected ${b4a.toString(peer.remotePublicKey, 'hex')} ***`)
+      if (onConnection) {
+        onConnection(peer)
+      }
       this.db.replicate(peer)
-
+      peer.on('data',(data)=>{
+        if (onData) {
+          onData(peer,data)
+        }
+      })
       peer.on('error',(err)=>{
+        if (onError) {
+          onError(peer,err)
+        }
         console.error(`** Peer has beed disconected ${b4a.toString(peer.remotePublicKey, 'hex')}`)
       })
     })
